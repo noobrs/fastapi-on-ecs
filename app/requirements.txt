@@ -1,2 +1,14 @@
 fastapi==0.109.2
 uvicorn==0.27.1
+python-dotenv==1.0.0
+supabase==2.0.3
+pydantic-settings==2.1.0
+httpx==0.26.0
+Pillow==10.2.0
+spacy==3.7.2
+spacy-layout==0.32.1
+gliner==0.2.0
+PyMuPDF==1.23.26
+opencv-python==4.9.0.80
+numpy==1.26.3
+

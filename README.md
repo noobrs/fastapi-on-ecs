@@ -1,7 +1,7 @@
 # How to use this Repo
 ## Warning
 - Always make sure to destroy your API Service. Forgetting to do so could incur a large AWS fee
-- Never commit your AWS Account ID to git. Save it in an `.env` file and ensure `.env` is added to your `.gitiginore`
+- Never commit your AWS Account ID to git. Save it in an `.env` file and ensure `.env` is added to your `.gitignore`
 
 ## Setup, Deploy, and Destroy
 
@@ -36,32 +36,65 @@ Alternatively you can skip this step to store your Terraform state locally.
 <br>
 
 ### Setup, Deploy, and Destroy Infrastructure/App
-All of the following commands are run via the Makefile.
+
+#### For Windows PowerShell Users:
+
+1. **Quick Setup** (First time only)
+    ```powershell
+    .\setup.ps1
+    ```
+    This will create your configuration files and check prerequisites.
+
+2. **Edit Configuration**
+    - Update `.env` with your AWS credentials
+    - Update `app/.env.local` with your secrets
+    - Edit `deploy.ps1` line 50 to set your APP_NAME
+
+3. **Deploy to AWS**
+    ```powershell
+    # Setup ECR Repository (one time)
+    .\deploy.ps1 setup-ecr
+    
+    # Build and push Docker image
+    .\deploy.ps1 deploy-container
+    
+    # Deploy ECS service
+    .\deploy.ps1 deploy-service
+    ```
+
+4. **Update your application** (after code changes)
+    ```powershell
+    .\deploy.ps1 update
+    ```
+
+5. **Destroy your API Service**
+    ```powershell
+    .\deploy.ps1 destroy-service
+    ```
+
+#### For Linux/Mac/WSL Users (Makefile):
 
 1. Setup your ECR Repository (one time)
-    ```
+    ```bash
     make setup-ecr
     ```
 
-<br>
-
 2. Build and deploy your container
-    ```
+    ```bash
     make deploy-container
     ```
 
-<br>
-
 3. Deploy your API Service on ECS Fargate
-    ```
+    ```bash
     make deploy-service
     ```
-    Note: The URL for your endpoint will be printed by Terraform once the above command is done executing. Example: `alb_dns_name = "<APP_NAME>-alb-123456789.<AWS_REGION>.elb.amazonaws.com"`. Navigate to that URL in your browser to ensure the API is working. You can also check out the API docs at the `<URL>/docs` endpoint.
-
-<br>
 
 4. Destroy your API Service on ECS Fargate
-    ```
+    ```bash
     make destroy-service
     ```
+
+**Note:** The URL for your endpoint will be printed by Terraform once deployment is complete. Example: `alb_dns_name = "<APP_NAME>-alb-123456789.<AWS_REGION>.elb.amazonaws.com"`. Navigate to that URL in your browser to ensure the API is working. You can also check out the API docs at the `<URL>/api/py/docs` endpoint.
+
+**See DEPLOYMENT_GUIDE.md for detailed instructions and troubleshooting.**
 
